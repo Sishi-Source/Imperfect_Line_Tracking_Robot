@@ -13,7 +13,7 @@
 #### Wiring
 - **Step 1:** Connect TB6612FNG Motor Driver to DC Motors. A01 and A02 pins are connected to the left motor(s). B01 and B02 pins are connected to the right motors.
 
-	![Diagrams/DCMotor-to-TB6612FNG.png]
+	![Diagrams/DCMotor-to-TB6612FNG.png](Diagrams/DCMotor-to-TB6612FNG.png)
 - **Step 2:** Connect ESP32 to TB6612FNG Motor Driver. Follow the connections:
 	GPIO 32 -> PWMA
     GPIO 25 -> AIN1
@@ -23,7 +23,7 @@
     GPIO 26 -> BIN1
     GPIO 27 -> BIN2
     
-	![[Diagrams/TB6612FNG-to-ESP32.png]]
+	![Diagrams/TB6612FNG-to-ESP32.png](Diagrams/TB6612FNG-to-ESP32.png)
 - **Step 3:** Connect FC-51 IR Sensor Modules to ESP32. Follow the connections: 
 	3.3V      -> VCC (All 3 VCC Pins)
 	GND      -> GND (All 3 GND Pins)
@@ -31,11 +31,12 @@
 	GPIO 19 -> OUT (Center IR Sensor) 
 	GPIO 21 -> OUT (Left IR Sensor) 
 	
-	![[Diagrams/IRSensors-to-ESP32.png]]
+	![Diagrams/IRSensors-to-ESP32.png](Diagrams/IRSensors-to-ESP32.png)
 - **Step 4:** Connect two (2) Power Source (18650 Battery) to TB6612FNG and ESP32. Follow the connections:
-	> [!warning] Warning
-	>Batt1 for powering DC motors and should be within the rate of the motors
-	 Batt2 for powering TB6612FNG and ESP32. The battery should be within both components' voltage rating to avoid breaking the components. (3V should be enough for this project)
+	> [!WARNING]
+  > Proper Battery Voltage Rate
+	> Batt1 for powering DC motors and should be within the rate of the motors
+	> Batt2 for powering TB6612FNG and ESP32. The battery should be within both components' voltage rating to avoid breaking the components. (3V should be enough for this project)
 
 	Batt1 + -> VM
 	Batt1 - -> GND
@@ -44,7 +45,8 @@
 	![[Diagrams/PowerSupply-to-ESP32-TB6612FNG.png]]
 #### Uploading Code
 
-> [!important] Install PlatformIO
+> [!IMPORTANT]
+> Install PlatformIO
 > The framework used in this project is esp-idf and it is not possible to copy and paste the code into arduino sketch. PlatformIO is the software used to compile and upload the code.
 
 
@@ -56,7 +58,7 @@ Compile and upload using the command:
 
 ---
 ## Output
-![[Diagrams/Output.png]]
+![Diagrams/Output.png](Diagrams/Output.png)
 ## Softwares
 1. [Fritzing](https://github.com/fritzing/fritzing-app)
 2. [PlatformIO](https://platformio.org/)
