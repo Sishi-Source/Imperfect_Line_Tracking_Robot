@@ -34,7 +34,7 @@
 	![Diagrams/IRSensors-to-ESP32.png](Diagrams/IRSensors-to-ESP32.png)  
 
 > [!WARNING]
-> Proper Battery Voltage Rate  
+> **Proper Battery Voltage Rate**  
 > Batt1 for powering DC motors and should be within the rate of the motors  
 > Batt2 for powering TB6612FNG and ESP32. The battery should be within both components' voltage rating to avoid breaking the components. (3V should be enough for this project)  
 - **Step 4:** Connect two (2) Power Source (18650 Battery) to TB6612FNG and ESP32. Follow the connections:  
@@ -46,8 +46,8 @@
 #### Uploading Code
 
 > [!IMPORTANT]
-> **Install PlatformIO**
-> The framework used in this project is esp-idf and it is not possible to copy and paste the code into arduino sketch. PlatformIO is the software used to compile and upload the code.
+> **Install PlatformIO**  
+> The framework used in this project is esp-idf and it is not possible to copy and paste the code into arduino sketch. PlatformIO is the software used to compile and upload the code.  
 
 
 
