@@ -15,34 +15,34 @@
 
 	![Diagrams/DCMotor-to-TB6612FNG.png](Diagrams/DCMotor-to-TB6612FNG.png)  
 - **Step 2:** Connect ESP32 to TB6612FNG Motor Driver. Follow the connections:  
-	  - GPIO 32 -> PWMA  
-    - GPIO 25 -> AIN1  
-    - GPIO 33 -> AIN2  
-    - GPIO 13 -> STBY  
-    - GPIO 14 -> PWMB  
-    - GPIO 26 -> BIN1  
-    - GPIO 27 -> BIN2  
+  - GPIO 32 -> PWMA  
+  - GPIO 25 -> AIN1  
+  - GPIO 33 -> AIN2  
+  - GPIO 13 -> STBY  
+  - GPIO 14 -> PWMB  
+  - GPIO 26 -> BIN1  
+  - GPIO 27 -> BIN2  
     
 	![Diagrams/TB6612FNG-to-ESP32.png](Diagrams/TB6612FNG-to-ESP32.png)  
 - **Step 3:** Connect FC-51 IR Sensor Modules to ESP32. Follow the connections:  
-	  - 3.3V      -> VCC (All 3 VCC Pins)  
-	  - GND      -> GND (All 3 GND Pins)  
-	  - GPIO 18 -> OUT (Right IR Sensor)  
-	  - GPIO 19 -> OUT (Center IR Sensor)  
-	  - GPIO 21 -> OUT (Left IR Sensor)  
+  - 3.3V      -> VCC (All 3 VCC Pins)  
+  - GND      -> GND (All 3 GND Pins)  
+  - GPIO 18 -> OUT (Right IR Sensor)  
+  - GPIO 19 -> OUT (Center IR Sensor)  
+  - GPIO 21 -> OUT (Left IR Sensor)  
 	
 	![Diagrams/IRSensors-to-ESP32.png](Diagrams/IRSensors-to-ESP32.png)  
-- **Step 4:** Connect two (2) Power Source (18650 Battery) to TB6612FNG and ESP32. Follow the connections:  
-	> [!WARNING]
-  > Proper Battery Voltage Rate  
-	> Batt1 for powering DC motors and should be within the rate of the motors  
-	> Batt2 for powering TB6612FNG and ESP32. The battery should be within both components' voltage rating to avoid breaking the components. (3V should be enough for this project)  
 
-	Batt1 + -> VM  
-	Batt1 - -> GND  
-	Batt2 + -> VCC and VIN (TB6612FNG & ESP32)  
-	Batt2 - -> GND (TB6612FNG & ESP32)  
-	![Diagrams/PowerSupply-to-ESP32-TB6612FNG.png](Diagrams/PowerSupply-to-ESP32-TB6612FNG.png) 
+> [!WARNING]
+> Proper Battery Voltage Rate  
+> Batt1 for powering DC motors and should be within the rate of the motors  
+> Batt2 for powering TB6612FNG and ESP32. The battery should be within both components' voltage rating to avoid breaking the components. (3V should be enough for this project)  
+- **Step 4:** Connect two (2) Power Source (18650 Battery) to TB6612FNG and ESP32. Follow the connections:  
+	- Batt1 + -> VM  
+	- Batt1 - -> GND  
+	- Batt2 + -> VCC and VIN (TB6612FNG & ESP32)  
+	- Batt2 - -> GND (TB6612FNG & ESP32)  
+	- ![Diagrams/PowerSupply-to-ESP32-TB6612FNG.png](Diagrams/PowerSupply-to-ESP32-TB6612FNG.png) 
 #### Uploading Code
 
 > [!IMPORTANT]
