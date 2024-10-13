@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "driver/gpio.h"
 #include "driver/ledc.h"
-#include "esp_wifi.h"
+
+#define GPIO_IN_REG         0x3FF4403C  // GPIO Input Reg 0-31
+#define GPIO_IN1_REG        0x3FF44040  // GPIO Input Reg 32-39
+#define GPIO_OUT_W1TS_REG   0x3FF44008  // GPIO Output Set Reg 0-31
+#define GPIO_OUT_W1TC_REG   0x3FF4400C  // GPIO Output Clear Reg 0-31
+#define GPIO_ENABLE_REG     0x3FF44020  // GPIO Enable 0-31
+#define GPIO_OUT1_W1TS_REG  0x3FF44014  // GPIO Output Set Reg 32-39
+#define GPIO_OUT1_W1TC_REG  0x3FF44018  // GPIO Output Clear Reg 32-39
+#define GPIO_ENABLE1_REG    0x3FF4402C  // GPIO Enable 32-39
 
 // Define GPIO pins for the IR sensors
 #define LEFT_SENSOR_PIN   21
@@ -31,9 +38,18 @@ void disable_wifi();
 void init_pwm_channel(int gpio, int channel);
 void set_speed(int channel, int speed);
 
+volatile uint32_t* gpio_in_reg        = (volatile uint32_t*) GPIO_IN_REG;
+volatile uint32_t* gpio_in1_reg       = (volatile uint32_t*) GPIO_IN1_REG;
+volatile uint32_t* gpio_out_w1ts_reg  = (volatile uint32_t*) GPIO_OUT_W1TS_REG;
+volatile uint32_t* gpio_out_w1tc_reg  = (volatile uint32_t*) GPIO_OUT_W1TC_REG;
+volatile uint32_t* gpio_enable_reg    = (volatile uint32_t*) GPIO_ENABLE_REG;
+volatile uint32_t* gpio_out1_w1ts_reg = (volatile uint32_t*) GPIO_OUT1_W1TS_REG;
+volatile uint32_t* gpio_out1_w1tc_reg = (volatile uint32_t*) GPIO_OUT1_W1TC_REG;
+volatile uint32_t* gpio_enable1_reg   = (volatile uint32_t*) GPIO_ENABLE1_REG;
+
 void app_main() {
+
   init_gpio();
-  disable_wifi();
 
   init_pwm_channel(PWMA, LEDC_CHANNEL_0);
   init_pwm_channel(PWMB, LEDC_CHANNEL_0);
@@ -61,50 +77,54 @@ void app_main() {
 }
 
 void init_gpio() {
+  // Enable GPIO Pins
+  *gpio_enable_reg  |= (1 << LEFT_SENSOR_PIN);
+  *gpio_enable_reg  |= (1 << CENTER_SENSOR_PIN);
+  *gpio_enable_reg  |= (1 << RIGHT_SENSOR_PIN);
+  *gpio_enable_reg  |= (1 << AIN1);
+  *gpio_enable1_reg |= (1 << (AIN2 - 32));
+  *gpio_enable_reg  |= (1 << BIN1);
+  *gpio_enable_reg  |= (1 << BIN2);
+  
+
   // Initialize IR sensor GPIO pins
-  gpio_set_direction(LEFT_SENSOR_PIN, GPIO_MODE_INPUT);
-  gpio_set_direction(CENTER_SENSOR_PIN, GPIO_MODE_INPUT);
-  gpio_set_direction(RIGHT_SENSOR_PIN, GPIO_MODE_INPUT);
+  *gpio_in_reg |= (1 << LEFT_SENSOR_PIN);
+  *gpio_in_reg |= (1 << CENTER_SENSOR_PIN);
+  *gpio_in_reg |= (1 << RIGHT_SENSOR_PIN);
 
   // Initialize motor control GPIO pins
-  gpio_set_direction(AIN1, GPIO_MODE_OUTPUT);
-  gpio_set_direction(AIN2, GPIO_MODE_OUTPUT);
-  gpio_set_direction(BIN1, GPIO_MODE_OUTPUT);
-  gpio_set_direction(BIN2, GPIO_MODE_OUTPUT);
+  *gpio_out_w1ts_reg  |= (1 << AIN1);
+  *gpio_out1_w1ts_reg |= (1 << (AIN2 - 32));
+  *gpio_out_w1ts_reg  |= (1 << BIN1);
+  *gpio_out_w1ts_reg  |= (1 << BIN2);
 }
 
 void move_forward() {
-  gpio_set_level(AIN1, 1);
-  gpio_set_level(AIN2, 0);
-  gpio_set_level(BIN1, 1);
-  gpio_set_level(BIN2, 0);
+  *gpio_out_w1ts_reg  |= (1 << AIN1);
+  *gpio_out1_w1tc_reg |= (1 << (AIN2 - 32));
+  *gpio_out_w1ts_reg  |= (1 << BIN1);
+  *gpio_out_w1tc_reg  |= (1 << BIN2);
 }
 
 void turn_left() {
-  gpio_set_level(AIN1, 0);
-  gpio_set_level(AIN2, 0);
-  gpio_set_level(BIN1, 1);
-  gpio_set_level(BIN2, 0);
+  *gpio_out_w1tc_reg  |= (1 << AIN1);
+  *gpio_out1_w1tc_reg |= (1 << (AIN2 - 32));
+  *gpio_out_w1ts_reg  |= (1 << BIN1);
+  *gpio_out_w1tc_reg  |= (1 << BIN2);
 }
 
 void turn_right() {
-  gpio_set_level(AIN1, 1);
-  gpio_set_level(AIN2, 0);
-  gpio_set_level(BIN1, 0);
-  gpio_set_level(BIN2, 0);
+  *gpio_out_w1ts_reg  |= (1 << AIN1);
+  *gpio_out1_w1tc_reg |= (1 << (AIN2 - 32));
+  *gpio_out_w1tc_reg  |= (1 << BIN1);
+  *gpio_out_w1tc_reg  |= (1 << BIN2);
 }
 
 void stop_motors() {
-  gpio_set_level(AIN1, 0);
-  gpio_set_level(AIN2, 0);
-  gpio_set_level(BIN1, 0);
-  gpio_set_level(BIN2, 0);
-}
-
-void disable_wifi() {
-  esp_wifi_stop();
-  esp_wifi_disconnect();
-  esp_wifi_deinit();
+  *gpio_out_w1tc_reg  |= (1 << AIN1);
+  *gpio_out1_w1tc_reg |= (1 << (AIN2 - 32));
+  *gpio_out_w1tc_reg  |= (1 << BIN1);
+  *gpio_out_w1tc_reg  |= (1 << BIN2);
 }
 
 void init_pwm_channel(int gpio, int channel) {
